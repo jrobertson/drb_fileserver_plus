@@ -10,105 +10,147 @@ require 'drb_fileclient'
 
 
 class DRbFileServer
+  
+  attr_accessor :nodes
 
   def initialize(nodes, sps: nil, topic: 'file')
     
-    @nodes = nodes.map {|x| 'dfs://' + x}
+    @nodes = nodes
     @failcount = 0
     @sps, @topic = sps, topic
     
   end
   
   def cp(path, path2)
+       
+    node = ''
     
     file_op do |f|
-      f.cp File.join(@nodes.first, path), File.join(@nodes.first, path2)
+      node = 'dfs://' + @nodes.first      
+      f.cp File.join(node, path), File.join(node, path2)
     end
     
     if @sps then
-      @sps.notice "%s/copy: %s %s" % [@topic, File.join(@nodes.first, path), 
-                               File.join(@nodes.first, path2)]
+      @sps.notice "%s/copy: %s %s" % [@topic, File.join(node, path), 
+                               File.join(node, path2)]
     end
 
   end    
 
   def exists?(fname)
-
-    file_op {|f| f.exists? File.join(@nodes.first, fname) }
+        
+    file_op do |f| 
+      node = 'dfs://' + @nodes.first
+      f.exists? File.join(node, fname) 
+    end
 
   end  
   
   def ls(path)
-
-    file_op {|f| f.ls File.join(@nodes.first, path) }
+    
+    file_op do |f| 
+      node = 'dfs://' + @nodes.first
+      f.ls File.join(node, path)
+    end
 
   end  
   
   def mkdir(path)
 
-    file_op {|f| f.mkdir File.join(@nodes.first, path) }
+    node = ''
+    
+    file_op do |f| 
+      node = 'dfs://' + @nodes.first
+      f.mkdir File.join(node, path)
+    end
     
     if @sps then
-      @sps.notice "%s/mkdir: %s" % [@topic, File.join(@nodes.first, path)]    
+      @sps.notice "%s/mkdir: %s" % [@topic, File.join(node, path)]    
     end
 
   end
   
   def mkdir_p(path)
 
-    file_op {|f| f.mkdir_p File.join(@nodes.first, path) }
+    node = ''    
+
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.mkdir_p File.join(node, path)
+    end
     
     if @sps then
-      @sps.notice "%s/mkdir_p: %s" % [@topic, File.join(@nodes.first, path)]
+      @sps.notice "%s/mkdir_p: %s" % [@topic, File.join(node, path)]
     end
     
   end
   
   def mv(path, path2)
 
+    node = ''
+    
     file_op do |f|
-      f.mv File.join(@nodes.first, path), File.join(@nodes.first, path2)
+      node = 'dfs://' + @nodes.first
+      f.mv File.join(node, path), File.join(node, path2)
     end
     
     if @sps then
-      @sps.notice "%s/mv: %s %s" % [@topic, File.join(@nodes.first, path), 
-                               File.join(@nodes.first, path2)]
+      @sps.notice "%s/mv: %s %s" % [@topic, File.join(node, path), 
+                               File.join(node, path2)]
     end
 
   end   
   
   def read(fname)
-
-    file_op {|f| f.read File.join(@nodes.first, fname) }
+    
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.read File.join(node, fname)
+    end
 
   end
   
   def rm(fname)
 
-    file_op {|f| f.rm File.join(@nodes.first, fname) }
+    node = ''
+    
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.rm File.join(node, fname)
+    end
     
     if @sps then
-      @sps.notice "%s/rm: %s" % [@topic, File.join(@nodes.first, fname)]
+      @sps.notice "%s/rm: %s" % [@topic, File.join(node, fname)]
     end
 
   end   
 
   def write(fname, content)
 
-    file_op {|f| f.write File.join(@nodes.first, fname), content }
+    node = ''
+    
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.write File.join(node, fname), content
+    end
     
     if @sps then
-      @sps.notice("%s/write: %s" % [@topic, File.join(@nodes.first, fname)])
+      @sps.notice("%s/write: %s" % [@topic, File.join(node, fname)])
     end
     
   end
   
   def zip(fname, a)
-
-    file_op {|f| f.zip File.join(@nodes.first, fname), a }
+    
+    node = ''
+    
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.zip File.join(node, fname), a
+    end
     
     if @sps then
-      @sps.notice "%s/zip: %s" % [@topic, File.join(@nodes.first, fname)]
+      @sps.notice "%s/zip: %s" % [@topic, File.join(node, fname)]
     end
     
   end  
