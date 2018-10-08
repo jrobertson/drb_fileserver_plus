@@ -165,11 +165,12 @@ class DRbFileServer
       @failcount = 0
       r
     rescue
+      raise $! if ($!).inspect =~ /No such file or directory/
       puts 'warning: ' + ($!).inspect
       @nodes.rotate!
       @failcount += 1
       retry unless @failcount > @nodes.length
-      raise 'DRbFileServerPlus nodes exhausted'
+      raise 'DRbFileServerPlus nodes exhausted2'
     end
 
   end
