@@ -36,6 +36,15 @@ class DRbFileServer
     end
 
   end    
+  
+  def directory?(fname)
+        
+    file_op do |f| 
+      node = 'dfs://' + @nodes.first
+      f.directory? File.join(node, fname) 
+    end
+
+  end    
 
   def exists?(fname)
         
