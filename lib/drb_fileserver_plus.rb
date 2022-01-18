@@ -72,6 +72,16 @@ class DRbFileServer
 
   end
 
+  def glob(path)
+
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.glob File.join(node, path)
+    end
+
+  end
+
+
   def ls(path)
 
     file_op do |f|

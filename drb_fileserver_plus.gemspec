@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'drb_fileserver_plus'
-  s.version = '0.3.2'
+  s.version = '0.3.3'
   s.summary = 'Designed to provide fault tolerant access to a DRb file ' + 
       'server when 2 or more back-end nodes are running.'
   s.authors = ['James Robertson']
