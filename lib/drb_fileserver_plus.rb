@@ -161,6 +161,21 @@ class DRbFileServer
 
   end
 
+  def touch(fname, mtime: Time.now)
+
+    node = ''
+
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.touch File.join(node, fname), mtime: mtime
+    end
+
+    if @sps then
+      @sps.notice "%s/touch: %s" % [@topic, File.join(node, fname)]
+    end
+
+  end
+
   def write(fname, content)
 
     node = ''
