@@ -161,6 +161,21 @@ class DRbFileServer
 
   end
 
+  def rm_r(fname, force: false)
+
+    node = ''
+
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.rm_r File.join(node, fname), force: force
+    end
+
+    if @sps then
+      @sps.notice "%s/rm_r: %s" % [@topic, File.join(node, fname)]
+    end
+
+  end
+
   def touch(fname, mtime: Time.now)
 
     node = ''
