@@ -176,6 +176,36 @@ class DRbFileServer
 
   end
 
+  def ru(path)
+
+    node = ''
+
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.rm File.join(node, path)
+    end
+
+    if @sps then
+      @sps.notice "%s/ru: %s" % [@topic, File.join(node, path)]
+    end
+
+  end
+
+  def ru_r(path)
+
+    node = ''
+
+    file_op do |f|
+      node = 'dfs://' + @nodes.first
+      f.rm_r File.join(node, path)
+    end
+
+    if @sps then
+      @sps.notice "%s/ru_r: %s" % [@topic, File.join(node, path)]
+    end
+
+  end
+
   def touch(fname, mtime: Time.now)
 
     node = ''
